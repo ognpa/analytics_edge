@@ -2,7 +2,11 @@
 
 # This script file is intended to help you get started on the Kaggle platform, and to show you how to make a submission to the competition.
 
-
+library(tm)
+library(e1071)
+library(caTools)
+library(ROCR)
+library(randomForest)
 
 
 eBayTrain = read.csv("eBayiPadTrain.csv", stringsAsFactors=FALSE)
@@ -68,7 +72,7 @@ subsets=seq(3,80,2)
 rfFuncs$summary <- twoClassSummary
 trainctrl <- trainControl(classProbs= TRUE,
                           summaryFunction = twoClassSummary)
-control <- rfeControl(functions=rfFuncs, method="repeatedcv", number=2, repeats = 1, verbose=TRUE)
+control <- rfeControl(functions=rfFuncs, method="repeatedcv", number=10, repeats = 4, verbose=TRUE)
 results <- rfe(ebay_train_minus_sold, as.factor(ebay_train$sold), sizes=subsets, rfeControl=control,metric="ROC", trControl = trainctrl)
 
 results
